@@ -5,7 +5,7 @@
  *   lang: 'ru' | 'cs',
  *   email: 'seo@marketexpert.cz',   // optional
  *   whatsapp: '420705995770',       // optional, digits only
- *   blog: 'https://marketexpert.cz/ru/blog'  // optional; null to hide; по умолчанию скрыт для lang: 'cs'
+ *   blog: 'https://marketexpert.cz/ru/blog'  // optional, null to hide
  * })
  */
 (function () {

@@ -8,9 +8,12 @@
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://reputation.marketexpert.cz/">
 <link rel="alternate" hreflang="ru" href="https://reputation.marketexpert.cz/">
+<link rel="alternate" hreflang="cs" href="https://reputation.marketexpert.cz/cz/">
+<link rel="alternate" hreflang="x-default" href="https://reputation.marketexpert.cz/cz/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="M:E Agency">
 <meta property="og:locale" content="ru_RU">
+<meta property="og:locale:alternate" content="cs_CZ">
 <meta property="og:url" content="https://reputation.marketexpert.cz/">
 <meta property="og:title" content="Управление репутацией в Праге и Чехии — Google Карты, отзывы, SERM | M:E Agency">
 <meta property="og:description" content="Агентство по репутации в Чехии: Google Business Profile, работа с отзывами, рост рейтинга, SERM. Прага и вся Чехия.">
@@ -60,11 +63,19 @@
 
   /* ====== NAV ====== */
   nav {
-    background: var(--burgundy-dark);
-    position: sticky; top: 0; z-index: 100;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: transparent;
+    transition: background 0.35s ease, box-shadow 0.35s ease, backdrop-filter 0.35s ease;
     display: flex; align-items: center; justify-content: space-between;
     padding: 0 48px; height: 64px;
     gap: 16px;
+  }
+  nav.scrolled,
+  nav.nav-open {
+    background: rgba(78, 18, 32, 0.94);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 6px 28px rgba(0, 0, 0, 0.28);
   }
   nav .nav-brand { flex-shrink: 0; margin-right: 12px; }
   @media (min-width: 961px) {
@@ -105,6 +116,33 @@
     transition: background .2s; white-space: nowrap;
   }
   .btn-nav:hover { background: var(--gold-dark); }
+
+  .lang-switch { position: relative; display: inline-block; }
+  .lang-switch__toggle {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: inherit; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    padding: 6px 11px; border: 1px solid rgba(255,255,255,.22); border-radius: 4px;
+    background: rgba(0,0,0,.12); color: #fff; cursor: pointer;
+    transition: background .2s ease, border-color .2s ease;
+  }
+  .lang-switch__toggle:hover, .lang-switch.is-open .lang-switch__toggle {
+    background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.35);
+  }
+  .lang-switch__chev { font-size: 9px; opacity: .75; line-height: 1; transition: transform .2s ease; }
+  .lang-switch.is-open .lang-switch__chev { transform: rotate(180deg); }
+  .lang-switch__menu {
+    position: absolute; top: calc(100% + 6px); right: 0; min-width: 120px;
+    background: var(--burgundy-dark); border: 1px solid rgba(255,255,255,.18); border-radius: 4px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.28); opacity: 0; visibility: hidden; pointer-events: none;
+    transform: translateY(-4px); transition: opacity .18s ease, visibility .18s ease, transform .18s ease; z-index: 110;
+  }
+  .lang-switch.is-open .lang-switch__menu { opacity: 1; visibility: visible; pointer-events: auto; transform: none; }
+  .lang-switch__option {
+    display: block; padding: 10px 14px; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    color: rgba(255,255,255,.75); text-decoration: none !important; white-space: nowrap;
+    transition: background .15s ease, color .15s ease;
+  }
+  .lang-switch__option:hover, .lang-switch__option:focus { background: rgba(255,255,255,.1); color: #fff; text-decoration: none !important; }
 
   /* ====== HERO ====== */
   .hero {
@@ -394,12 +432,13 @@
   }
 
   .packages-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    align-items: stretch; padding-top: 16px;
   }
   .pkg-card {
     background: var(--white); padding: 36px 32px;
     position: relative; border: 1px solid var(--beige-dark);
-    display: flex; flex-direction: column;
+    display: flex; flex-direction: column; height: 100%; min-height: 0;
   }
   .pkg-card.featured {
     background: var(--burgundy); border-color: var(--burgundy);
@@ -436,14 +475,17 @@
   .pkg-card.featured .pkg-who {
     color: rgba(255,255,255,0.7); border-bottom-color: rgba(255,255,255,0.15);
   }
-  .pkg-features { list-style: none; flex: 1; }
+  .pkg-features { list-style: none; flex: 1; display: flex; flex-direction: column; gap: 11px; }
   .pkg-features li {
-    font-size: 13px; color: var(--text-mid); padding: 7px 0;
-    display: flex; align-items: flex-start; gap: 10px; line-height: 1.4;
+    font-size: 13px; color: var(--text-mid); padding: 0;
+    display: flex; align-items: flex-start; gap: 10px; line-height: 1.5;
   }
   .pkg-card.featured .pkg-features li { color: rgba(255,255,255,0.8); }
+  .pkg-features li strong {
+    display: block; font-weight: 700; margin-bottom: 2px;
+  }
   .pkg-features li::before {
-    content: '✓'; color: var(--gold); font-weight: 700; flex-shrink: 0; margin-top: 1px;
+    content: '✓'; color: var(--gold); font-weight: 700; flex-shrink: 0; margin-top: 2px;
   }
   .pkg-setup {
     font-size: 12px; color: var(--text-light); margin-top: 20px;
@@ -473,7 +515,7 @@
   }
   .packages-grid .pkg-card.pkg-anim-item::before {
     content: ''; position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(224,155,26,.12) 0%, rgba(255,255,255,.35) 42%, transparent 72%);
+    background: linear-gradient(135deg, rgba(224,155,26,.14) 0%, rgba(255,255,255,.05) 42%, transparent 72%);
     opacity: 0; transition: opacity .4s ease; pointer-events: none; z-index: 0;
   }
   .packages-grid .pkg-card.pkg-anim-item::after {
@@ -486,13 +528,13 @@
   .packages-grid .pkg-card.pkg-anim-item:hover::after { opacity: 1; transform: scaleX(1); }
   .packages-grid .pkg-card.pkg-anim-item:hover {
     transform: translateY(-10px) scale(1.03);
-    box-shadow: 0 22px 50px rgba(107,26,42,.14), 0 0 0 1px rgba(224,155,26,.2);
-    border-color: rgba(224,155,26,.35); z-index: 2;
+    box-shadow: 0 22px 50px rgba(107,26,42,.12), 0 0 0 1px rgba(224,155,26,.22);
+    border-color: rgba(224,155,26,.42); z-index: 2;
   }
   .packages-grid .pkg-card.pkg-anim-item.featured { box-shadow: 0 16px 40px rgba(78,18,32,.2); }
   .packages-grid .pkg-card.pkg-anim-item.featured:hover {
     transform: translateY(-12px) scale(1.04);
-    box-shadow: 0 28px 60px rgba(78,18,32,.28), 0 0 28px rgba(224,155,26,.1);
+    box-shadow: 0 28px 60px rgba(78,18,32,.28), 0 0 28px rgba(224,155,26,.12);
     border-color: var(--gold);
   }
   .packages-grid .pkg-card.pkg-anim-item > * { position: relative; z-index: 1; }
@@ -508,7 +550,7 @@
   }
   @keyframes pkgCardInHot {
     from { opacity: 0; transform: translateY(40px) scale(.98); }
-    to { opacity: 1; transform: scale(1.02); }
+    to { opacity: 1; transform: none; }
   }
   @media (prefers-reduced-motion: reduce) {
     .packages-grid .pkg-card.pkg-anim-item:hover { transform: none; }
@@ -1055,13 +1097,16 @@
       text-align: center;
       border-bottom: none;
     }
+    .nav-links .lang-switch { margin: 16px 0 0; width: 100%; }
+    .nav-links .lang-switch__toggle { width: 100%; justify-content: space-between; }
+    .nav-links .lang-switch__menu { left: 0; right: 0; min-width: 0; }
     html.nav-open { overflow: hidden; }
 
     .container { padding: 56px 24px; }
     .hero-content {
       grid-template-columns: 1fr;
       gap: 32px;
-      padding: 48px 24px 56px;
+      padding: 80px 24px 56px;
     }
     .hero h1 { font-size: clamp(28px, 7vw, 40px); }
     .hero-subtitle { max-width: none; font-size: 15px; }
@@ -1078,9 +1123,11 @@
 
     .problems-grid { grid-template-columns: 1fr; }
     .stats-grid { grid-template-columns: 1fr; gap: 16px; }
-    .packages-grid { grid-template-columns: 1fr; }
-    .pkg-card { border-bottom: 1px solid var(--beige-dark); }
+    .packages-grid { grid-template-columns: 1fr; gap: 20px; padding-top: 12px; }
+    .pkg-card { border: 1px solid var(--beige-dark); }
+    .pkg-card.featured { margin-top: 8px; }
     .pkg-badge { white-space: normal; text-align: center; max-width: calc(100% - 24px); }
+    .packages-grid .pkg-card.pkg-anim-item:hover { transform: none; }
     .reviews-grid { grid-template-columns: 1fr; }
     .cta-inner { grid-template-columns: 1fr; gap: 32px; }
     .cta-text h2 { font-size: clamp(26px, 6vw, 34px); }
@@ -1106,7 +1153,7 @@
 
   @media (max-width: 600px) {
     .container { padding: 48px 16px; }
-    .hero-content { padding: 40px 16px 48px; }
+    .hero-content { padding: 72px 16px 48px; }
     .hero-stats { grid-template-columns: 1fr; }
     .hero-stat-num { font-size: 28px; }
     .stat-card { padding: 24px 20px; }
@@ -1139,6 +1186,17 @@
     <li><a href="#how">Как работаем</a></li>
     <li><a href="#packages">Пакеты</a></li>
     <li><a href="#faq">Вопросы</a></li>
+    <li>
+      <div class="lang-switch">
+        <button type="button" class="lang-switch__toggle" aria-expanded="false" aria-haspopup="listbox" aria-label="Выбрать язык">
+          <span class="lang-switch__current">RU</span>
+          <span class="lang-switch__chev" aria-hidden="true">▾</span>
+        </button>
+        <div class="lang-switch__menu" role="listbox" aria-label="Язык">
+          <a href="cz/index.html" hreflang="cs" class="lang-switch__option" role="option">Čeština (CZ)</a>
+        </div>
+      </div>
+    </li>
     <li><button type="button" onclick="openModal('general')" class="btn-nav" style="cursor:pointer;">Оставить заявку</button></li>
   </ul>
 </nav>
@@ -1164,6 +1222,35 @@
   window.addEventListener('resize', function(){
     if (window.innerWidth > 960) setOpen(false);
   });
+  function closeLangMenus() {
+    document.querySelectorAll('.lang-switch.is-open').forEach(function(sw){
+      sw.classList.remove('is-open');
+      var b = sw.querySelector('.lang-switch__toggle');
+      if (b) b.setAttribute('aria-expanded', 'false');
+    });
+  }
+  document.querySelectorAll('.lang-switch').forEach(function(sw){
+    var btn = sw.querySelector('.lang-switch__toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      var open = sw.classList.contains('is-open');
+      closeLangMenus();
+      if (!open) {
+        sw.classList.add('is-open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+  document.addEventListener('click', closeLangMenus);
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') closeLangMenus();
+  });
+  function updateNavScroll() {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }
+  window.addEventListener('scroll', updateNavScroll, { passive: true });
+  updateNavScroll();
 })();
 </script>
 
@@ -1336,7 +1423,7 @@
           <div class="step-indicator"><span>02</span></div>
           <div class="step-meta">Шаг 2</div>
           <h3 class="step-title">Настройка и сбор отзывов</h3>
-          <p class="step-desc">Оптимизируем профили, запускаем систему сбора отзывов: QR-коды, email/SMS, интеграция с CRM. Клиенты начинают оставлять отзывы системно.</p>
+          <p class="step-desc">Оптимизируем профили, запускаем систему сбора отзывов. Клиенты начинают оставлять отзывы системно.</p>
           <div class="step-result">→ Поток новых отзывов на ключевых площадках</div>
         </article>
         <article class="process-step" data-step="2">
@@ -1396,9 +1483,9 @@
         <div class="pkg-price-sub">/ месяц <span style="color:var(--text-light); text-decoration:line-through; font-size:12px;">был 11 000</span></div>
         <div class="pkg-who">Кофейни, парикмахерские, маленькие СТО и любой малый бизнес с одной точкой.</div>
         <ul class="pkg-features">
-          <li><strong>Чистка мусора:</strong> Мониторинг Google Maps и Firmy.cz. Удаление фейков и неприемлемого контента через жалобы.</li>
+          <li><strong>Чистка мусора:</strong> Мониторинг отзывов в интернете. Удаление фейков и неприемлемого контента.</li>
           <li><strong>Менеджер отзывов:</strong> Ответы на все отзывы в течение 24 часов.</li>
-          <li><strong>Локальное SEO:</strong> Оптимизация карточки — фотки, часы работы, описание. Чтобы вас находили на картах.</li>
+          <li><strong>Локальное SEO:</strong> Оптимизация карточки - чтобы вас находили на картах.</li>
         </ul>
         <div class="pkg-setup">Минимальный срок: 1 месяц</div>
         <button type="button" onclick="openModal('start')" class="pkg-cta pkg-cta-light" style="width:100%;cursor:pointer;">Выбрать «Минимум» →</button>
@@ -1439,9 +1526,9 @@
         <div class="pkg-who">Отели, крупные застройщики, IT-компании, сети с 5+ локациями.</div>
         <ul class="pkg-features">
           <li>Всё из пакета «Оптима»</li>
-          <li><strong>Вытеснение негатива:</strong> Написали гадость в СМИ или блоге — заполняем первую страницу Google качественными материалами о вас.</li>
-          <li><strong>Адвокаты бренда:</strong> Работа с микроблогерами в Чехии (Instagram, YouTube, тематические блоги) — о вас говорят в позитивном ключе.</li>
-          <li><strong>Юридический блок:</strong> Официальные претензии к площадкам от нашего имени — удаление клеветы без вашего участия.</li>
+          <li><strong>Вытеснение негатива:</strong> Заполняем первую страницу Google качественными материалами о вас.</li>
+          <li><strong>Адвокаты бренда:</strong> Работа с микроблогерами в Чехии — о вас говорят в позитивном ключе.</li>
+          <li><strong>Юридический блок:</strong> Официальные методики удаления клеветы без вашего участия.</li>
         </ul>
         <div class="pkg-setup">Минимальный срок: 6 месяцев</div>
         <button type="button" onclick="openModal('premium')" class="pkg-cta pkg-cta-light" style="width:100%;cursor:pointer;">Выбрать «Масштаб» →</button>
