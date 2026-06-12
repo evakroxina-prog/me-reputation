@@ -26,6 +26,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=DM+Sans:wght@400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="footer.css">
 <link rel="stylesheet" href="cookie.css">
+<link rel="stylesheet" href="form-success.css">
 <link rel="stylesheet" href="whatsapp-fab.css">
 <script>window.__GA4_MEASUREMENT_ID__ = 'G-SPKHXMCQGM'; window.__GA4_ADS_ID__ = 'AW-11432613975';</script>
 <style>
@@ -111,6 +112,7 @@
     background: var(--burgundy-dark);
     display: flex; align-items: center;
     overflow: hidden;
+    scroll-margin-top: 68px;
   }
   .hero-bg {
     position: absolute; inset: 0;
@@ -1123,7 +1125,7 @@
 
 <!-- NAV -->
 <nav aria-label="Меню страницы">
-  <a href="https://marketexpert.cz/" class="nav-brand" target="_self" rel="noopener noreferrer">
+  <a href="#hero" class="nav-brand">
     <img src="logo.png" alt="M:E agency" class="nav-brand__img" width="40" height="40" decoding="async" onerror="this.onerror=null;this.src='logo.svg'">
     <span class="nav-brand__text">M:E <em class="nav-brand__agency">agency</em></span>
   </a>
@@ -1166,7 +1168,7 @@
 </script>
 
 <!-- HERO -->
-<section class="hero">
+<section class="hero" id="hero">
   <div class="hero-bg-img"></div>
   <div class="hero-bg"></div>
   <div class="hero-content">
@@ -1303,7 +1305,7 @@
       <div class="photo-strip__platforms">Google · Firmy.cz · TripAdvisor · Booking.com · Facebook</div>
     </div>
   </div>
-  <div class="photo-strip__cell" style="background-image: url('положительные отзывы.png'); background-size: cover; background-position: center;">
+  <div class="photo-strip__cell" style="background-image: url('положительные отзывы.jpg'); background-size: cover; background-position: center;">
     <div class="photo-strip__overlay"></div>
     <div class="photo-strip__caption">
       <div class="photo-strip__label">Результаты</div>
@@ -1642,6 +1644,9 @@
   </div>
   <div class="site-footer__copy-row">
     <p class="site-footer__copy">© 2026 M:E Agency · Praha · Репутация</p>
+    <p class="site-footer__crafted">
+      <a href="https://marketexpert.cz/" target="_blank" rel="noopener noreferrer"><span class="site-footer__crafted-label">Created by</span><span class="site-footer__crafted-brand"><span class="site-footer__crafted-me">M:E</span> <em>agency</em></span></a>
+    </p>
   </div>
 </footer>
 
@@ -1726,7 +1731,12 @@
         }
         btn.innerHTML = '<span>✓ Заявка отправлена</span>';
         btn.classList.add('is-submitted');
+        btn.disabled = true;
         form.reset();
+        if (typeof window.closeModal === 'function') window.closeModal();
+        if (typeof window.showFormSuccess === 'function') {
+          window.showFormSuccess({ lang: 'ru', email: 'reputation@marketexpert.cz' });
+        }
         return;
       }
       var msg = 'Не удалось отправить заявку.';
@@ -1933,6 +1943,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     </div>
   </div>
 </div>
+<script src="form-success.js"></script>
 <script src="me-analytics.js"></script>
 </body>
 </html>
